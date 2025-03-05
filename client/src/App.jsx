@@ -13,6 +13,7 @@ function App() {
 
             {/* Main component   */}
             <main className="main">
+                
                 {/* Section component   */}
                 <UserList />
 
