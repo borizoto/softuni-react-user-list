@@ -1,8 +1,23 @@
+import { useEffect, useState } from "react";
 import Pagination from "./Pagination";
 import Search from "./Search";
 import UserListItem from "./UserListItem";
+import userService from "../services/userService";
 
 export default function UserList() {
+    const [users, setUsers] = useState([]);
+
+    useEffect(() => {
+        userService.getAll()
+        .then(dataObj => {
+            setUsers(dataObj);
+        })
+        .catch(err => {
+            alert(err.message)
+            // console.log(err.message)
+        })
+    }, [])
+
     return (
         <section className="card users-container">
 
@@ -139,7 +154,7 @@ export default function UserList() {
                     </thead>
                     <tbody>
                         {/* Table row component */}
-                        <UserListItem />
+                        {users.map(user =>  <UserListItem key={user._id} {...user}/>)}
                     </tbody>
                 </table>
             </div>
