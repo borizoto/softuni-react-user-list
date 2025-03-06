@@ -28,13 +28,27 @@ export default function UserList() {
         setShowCreate(false);
     }
 
+    const saveCreateUserClickHandler = async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(e.target);
+        const data = Object.fromEntries(formData);
+
+        await userService.create(data);
+    }
+
     return (
         <section className="card users-container">
 
             {/* Search bar component  */}
             <Search />
 
-            {showCreate && <UserCreateForm onClose={closeCreateUserClickHandler} />}
+            {showCreate &&
+                (<UserCreateForm
+                    onClose={closeCreateUserClickHandler}
+                    onSave={saveCreateUserClickHandler}
+                />)
+            }
 
             {/* Table component  */}
             <div className="table-wrapper">

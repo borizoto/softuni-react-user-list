@@ -1,5 +1,6 @@
 export default function UserCreateForm({
     onClose,
+    onSave
 }) {
     return (
         <div className="overlay">
@@ -17,7 +18,7 @@ export default function UserCreateForm({
                             </svg>
                         </button>
                     </header>
-                    <form>
+                    <form onSubmit={onSave}>
                         <div className="form-row">
                             <div className="form-group">
                                 <label htmlFor="firstName">First name</label>
