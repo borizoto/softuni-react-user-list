@@ -15,8 +15,8 @@ export default function UserList() {
                 setUsers(dataObj);
             })
             .catch(err => {
-                alert(err.message)
-                // console.log(err.message)
+                // alert(err.message)
+                console.log(err.message)
             })
     }, [])
 
@@ -34,7 +34,19 @@ export default function UserList() {
         const formData = new FormData(e.target);
         const data = Object.fromEntries(formData);
 
-        await userService.create(data);
+        if (!Object.values(data).every(value => !!value)) {
+            return alert('All fields must be filled!');
+        }
+
+        try {
+            const newUser = await userService.create(data);
+
+            setUsers(users => [...users, newUser]);
+
+            setShowCreate(false);
+        } catch (error) {
+            alert(error.message);
+        }
     }
 
     return (
