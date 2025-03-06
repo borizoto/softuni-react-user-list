@@ -3,26 +3,38 @@ import Pagination from "./Pagination";
 import Search from "./Search";
 import UserListItem from "./UserListItem";
 import userService from "../services/userService";
+import UserCreateForm from "./UserCreateForm";
 
 export default function UserList() {
     const [users, setUsers] = useState([]);
+    const [showCreate, setShowCreate] = useState(false);
 
     useEffect(() => {
         userService.getAll()
-        .then(dataObj => {
-            setUsers(dataObj);
-        })
-        .catch(err => {
-            alert(err.message)
-            // console.log(err.message)
-        })
+            .then(dataObj => {
+                setUsers(dataObj);
+            })
+            .catch(err => {
+                alert(err.message)
+                // console.log(err.message)
+            })
     }, [])
+
+    const showCreateUserClickHandler = () => {
+        setShowCreate(true);
+    }
+
+    const closeCreateUserClickHandler = () => {
+        setShowCreate(false);
+    }
 
     return (
         <section className="card users-container">
 
             {/* Search bar component  */}
             <Search />
+
+            {showCreate && <UserCreateForm onClose={closeCreateUserClickHandler} />}
 
             {/* Table component  */}
             <div className="table-wrapper">
@@ -154,13 +166,13 @@ export default function UserList() {
                     </thead>
                     <tbody>
                         {/* Table row component */}
-                        {users.map(user =>  <UserListItem key={user._id} {...user}/>)}
+                        {users.map(user => <UserListItem key={user._id} {...user} />)}
                     </tbody>
                 </table>
             </div>
 
             {/* New user button   */}
-            <button className="btn-add btn">Add new user</button>
+            <button onClick={showCreateUserClickHandler} className="btn-add btn">Add new user</button>
 
             {/* Pagination component  */}
             <Pagination />
