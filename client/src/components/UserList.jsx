@@ -4,10 +4,12 @@ import Search from "./Search";
 import UserListItem from "./UserListItem";
 import userService from "../services/userService";
 import UserCreateForm from "./UserCreateForm";
+import UserInfo from "./UserInfo";
 
 export default function UserList() {
     const [users, setUsers] = useState([]);
     const [showCreate, setShowCreate] = useState(false);
+    const [showInfo, setShowInfo] = useState(null);
 
     useEffect(() => {
         userService.getAll()
@@ -49,6 +51,14 @@ export default function UserList() {
         }
     }
 
+    const showInfoClickHandler = (userId) => {
+        setShowInfo(userId);
+    }
+
+    const closeInfoClickHandler = () => {
+        setShowInfo(null);
+    }
+
     return (
         <section className="card users-container">
 
@@ -59,6 +69,12 @@ export default function UserList() {
                 (<UserCreateForm
                     onClose={closeCreateUserClickHandler}
                     onSave={saveCreateUserClickHandler}
+                />)
+            }
+
+            {showInfo &&
+                (<UserInfo
+                    onClose={closeInfoClickHandler}             
                 />)
             }
 
@@ -192,7 +208,7 @@ export default function UserList() {
                     </thead>
                     <tbody>
                         {/* Table row component */}
-                        {users.map(user => <UserListItem key={user._id} {...user} />)}
+                        {users.map(user => <UserListItem key={user._id} onInfoClick={showInfoClickHandler} {...user} />)}
                     </tbody>
                 </table>
             </div>
