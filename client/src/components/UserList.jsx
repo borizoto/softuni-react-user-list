@@ -74,7 +74,8 @@ export default function UserList() {
 
             {showInfo &&
                 (<UserInfo
-                    onClose={closeInfoClickHandler}             
+                    userId={showInfo}
+                    onClose={closeInfoClickHandler}
                 />)
             }
 

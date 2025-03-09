@@ -13,6 +13,17 @@ export default {
         }
     },
 
+    async getOne(userId) {
+        try {
+            const response = await fetch(`${baseUrl}/${userId}`);
+            const user = await response.json();
+
+            return user;
+        } catch (err) {
+            throw new Error(err);
+        }
+    },
+
     async create(userData) {
         try {
             const { country, city, street, streetNumber, ...data } = userData;
