@@ -5,11 +5,13 @@ import UserListItem from "./UserListItem";
 import userService from "../services/userService";
 import UserCreateForm from "./UserCreateForm";
 import UserInfo from "./UserInfo";
+import UserDelete from "./UserDelete";
 
 export default function UserList() {
     const [users, setUsers] = useState([]);
     const [showCreate, setShowCreate] = useState(false);
     const [showInfo, setShowInfo] = useState(null);
+    const [showDelete, setShowDelete] = useState(null);
 
     useEffect(() => {
         userService.getAll()
@@ -59,6 +61,26 @@ export default function UserList() {
         setShowInfo(null);
     }
 
+    const showDeleteClickHandler = (userId) => {
+        setShowDelete(userId);
+    }
+
+    const closeDeleteClickHandler = () => {
+        setShowDelete(null);
+    }
+
+    const userDeleteClickHandler = async () => {
+        try {
+            const deletedUser = await userService.delete(showDelete);
+
+            setUsers(curUsers => curUsers.filter(user => user._id !== showDelete));
+
+            setShowDelete(null);
+        } catch (error) {
+            alert(error.message);
+        }
+    }
+
     return (
         <section className="card users-container">
 
@@ -76,6 +98,14 @@ export default function UserList() {
                 (<UserInfo
                     userId={showInfo}
                     onClose={closeInfoClickHandler}
+                />)
+            }
+
+            {showDelete &&
+                (<UserDelete
+                    userId={showDelete}
+                    onClose={closeDeleteClickHandler}
+                    onDelete={userDeleteClickHandler}
                 />)
             }
 
@@ -209,7 +239,7 @@ export default function UserList() {
                     </thead>
                     <tbody>
                         {/* Table row component */}
-                        {users.map(user => <UserListItem key={user._id} onInfoClick={showInfoClickHandler} {...user} />)}
+                        {users.map(user => <UserListItem key={user._id} onInfoClick={showInfoClickHandler} onShowDeleteClick={showDeleteClickHandler} {...user} />)}
                     </tbody>
                 </table>
             </div>

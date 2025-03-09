@@ -48,6 +48,18 @@ export default {
             console.error("Error creating user:", error);
             return { success: false, message: error.message };
         }
-    }
+    },
 
+    async delete(userId) {
+        try {
+            const deletedUser = await fetch(`${baseUrl}/${userId}`, {
+                method: 'DELETE'
+            });
+
+            return deletedUser;
+        } catch (error) {
+            console.error("Error deleting user:", error);
+            return { success: false, message: error.message };
+        }
+    }
 }
