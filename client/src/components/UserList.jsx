@@ -3,15 +3,17 @@ import Pagination from "./Pagination";
 import Search from "./Search";
 import UserListItem from "./UserListItem";
 import userService from "../services/userService";
-import UserCreateForm from "./UserCreateForm";
+import UserCreateForm from "./UserCreate";
 import UserInfo from "./UserInfo";
 import UserDelete from "./UserDelete";
+import UserEdit from "./UserEdit";
 
 export default function UserList() {
     const [users, setUsers] = useState([]);
     const [showCreate, setShowCreate] = useState(false);
     const [showInfo, setShowInfo] = useState(null);
     const [showDelete, setShowDelete] = useState(null);
+    const [showEdit, setShowEdit] = useState(null);
 
     useEffect(() => {
         userService.getAll()
@@ -81,6 +83,19 @@ export default function UserList() {
         }
     }
 
+    const showEditClickHandler = (userId) => {
+        setShowEdit(userId);
+    }
+
+    const closeEditClickHandler = () => {
+        setShowEdit(null);
+    }
+
+    const saveEditUserClickHandler = (e) => {
+        e.preventDefault();
+        console.log('saved')
+    }
+
     return (
         <section className="card users-container">
 
@@ -106,6 +121,14 @@ export default function UserList() {
                     userId={showDelete}
                     onClose={closeDeleteClickHandler}
                     onDelete={userDeleteClickHandler}
+                />)
+            }
+
+            {showEdit &&
+                (<UserEdit
+                    userId={showInfo}
+                    onClose={closeEditClickHandler}
+                    onSave={saveEditUserClickHandler}
                 />)
             }
 
@@ -239,7 +262,7 @@ export default function UserList() {
                     </thead>
                     <tbody>
                         {/* Table row component */}
-                        {users.map(user => <UserListItem key={user._id} onInfoClick={showInfoClickHandler} onShowDeleteClick={showDeleteClickHandler} {...user} />)}
+                        {users.map(user => <UserListItem key={user._id} onInfoClick={showInfoClickHandler} onShowDeleteClick={showDeleteClickHandler} onEditClick={showEditClickHandler} {...user} />)}
                     </tbody>
                 </table>
             </div>
