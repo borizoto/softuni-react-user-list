@@ -91,9 +91,27 @@ export default function UserList() {
         setShowEdit(null);
     }
 
-    const saveEditUserClickHandler = (e) => {
+    const saveEditUserClickHandler = async (e) => {
+        const userId = showEdit;
+
         e.preventDefault();
-        console.log('saved')
+
+        const formData = new FormData(e.target);
+        const data = Object.fromEntries(formData);
+
+        if (!Object.values(data).every(value => !!value)) {
+            return alert('All fields must be filled!');
+        }
+
+        try {
+            const updatedUser = await userService.update(data, userId);
+
+            setUsers(users => users.map(user => user._id === userId ? updatedUser : user));
+
+            setShowEdit(false);
+        } catch (error) {
+            alert(error.message);
+        }
     }
 
     return (
@@ -126,7 +144,7 @@ export default function UserList() {
 
             {showEdit &&
                 (<UserEdit
-                    userId={showInfo}
+                    userId={showEdit}
                     onClose={closeEditClickHandler}
                     onSave={saveEditUserClickHandler}
                 />)

@@ -1,4 +1,4 @@
-export default function UserCreateForm({
+export default function UserCreate({
     onClose,
     onSave
 }) {
